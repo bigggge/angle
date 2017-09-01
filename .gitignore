@@ -1,0 +1,8 @@
+.idea
+*.iml
+out
+gen
+dist
+node_modules
+src/test.js
+src/*.test.js

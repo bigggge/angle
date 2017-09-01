@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <script src="./dist/build.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div ng-controller="MainCtrl">
+        Parent
+        <button ng-click="foo()" ng-bind="'obj-'+obj.a"></button>
+        <button ng-click="foo2()" ng-bind="'a-'+a"></button>
+        <button ng-click="get()">Request</button>
+        <button ng-click="print()">Print Scope</button>
+        <button ng-click="toggle()">Toggle</button>
+        <span ng-show="show" ng-bind="'ngshow'+show"></span>
+        <span ng-show="true">true</span>
+        <span ng-show="!!0">false</span>
+        <span ng-if="show" ng-bind="'nfif'+show"></span>
+        <span ng-if="true">true</span>
+        <span ng-if="!!0">false</span>
+
+        <div ng-controller="ChildCtrl">
+          Child
+          <button ng-click="childMethod()" ng-bind="obj.a"></button>
+          <input ng-model="obj.a">
+          <button ng-click="childMethod2()" ng-bind="a"></button>
+          <input ng-model="a">
+        </div>
+
+      </div>
+    </div>
+    <script>
+
+      angle.controller('MainCtrl', function ($scope, HTTPService, $timeout) {
+        $scope.a = 1;
+        $scope.obj = {a: 2};
+        $scope.show = true;
+        $scope.foo = function () {
+          $scope.obj.a++;
+        };
+        $scope.foo2 = function () {
+          $scope.a++;
+        };
+        $scope.get = function () {
+          console.log('requesting...');
+          HTTPService('google.com')
+            .then(function (data) {
+              console.log(data);
+              $scope.a--;
+            });
+        };
+        $scope.print = function () {
+          console.log('angle.$cache', angle.$cache);
+          console.log('angle.$providers', angle.$providers);
+        };
+
+        $scope.toggle = function () {
+          $scope.show = !$scope.show;
+          $scope.digest()
+        };
+
+        $timeout(function () {
+          console.log('tttttttttttt');
+        }, 2000);
+      });
+
+      angle.controller('ChildCtrl', function ($scope) {
+        $scope.childMethod = function () {
+          $scope.obj.a++;
+        };
+        $scope.childMethod2 = function () {
+          $scope.a++;
+        };
+      });
+
+      angle.service('HTTPService', function httpService () {
+        return function request (url) {
+          var promise = new Promise(function (resolve, reject) {
+            setTimeout(function () {
+              resolve(url + ' done!');
+            }, 1000);
+          });
+          return promise;
+        };
+      });
+
+      angle.bootstrap('#app');
+
+    </script>
+  </body>
+</html>

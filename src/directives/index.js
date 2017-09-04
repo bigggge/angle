@@ -13,6 +13,7 @@
 // import ngShow from './ng-show';
 const ngController = require('./ng-controller');
 const ngBind = require('./ng-bind');
+const ngBindHtml = require('./ng-bind-html');
 const ngModel = require('./ng-model');
 const ngClick = require('./ng-click');
 const ngIf = require('./ng-if');
@@ -21,6 +22,7 @@ const ngShow = require('./ng-show');
 // export const directives = {
 //   ngController,
 //   ngBind,
+//   ngBindHtml,
 //   ngModel,
 //   ngClick,
 //   ngIf,
@@ -30,6 +32,7 @@ const ngShow = require('./ng-show');
 module.exports = {
   ngController,
   ngBind,
+  ngBindHtml,
   ngModel,
   ngClick,
   ngIf,

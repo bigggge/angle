@@ -9,6 +9,7 @@
 // import timeout from './timeout';
 const rootScope = require('./rootScope');
 const timeout = require('./timeout');
+const interval = require('./interval');
 
 // export const services = {
 //   rootScope,
@@ -17,5 +18,6 @@ const timeout = require('./timeout');
 
 module.exports = {
   rootScope,
-  timeout
+  timeout,
+  interval
 };

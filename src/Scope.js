@@ -19,11 +19,12 @@ function Scope (parent, id) {
 Scope.counter = 0;
 Scope.prototype = {
   // 监控表达式 exp，一旦发现exp的值有变化就执行回调函数fn，并且传入新的值
-  $watch: function (exp, fn) {
+  $watch: function (exp, fn, objectEquality) {
     this.$watchers.push({
       exp: exp,
       fn: fn,
-      old: Utils.clone(this.$eval(exp))
+      old: Utils.clone(this.$eval(exp)),
+      eq: !!objectEquality
     });
   },
   // 原型继承当前的scope对象，生成一个新的scope对象
@@ -44,18 +45,25 @@ Scope.prototype = {
   // 脏检测
   $digest: function (disabledScanChild) {
     let dirty, watcher, current, i;
+    // digest 最多迭代次数
+    let ttl = 10;
     do {
       console.log('$digest', this);
       dirty = false;
       for (i = 0; i < this.$watchers.length; i++) {
         watcher = this.$watchers[i];
         current = this.$eval(watcher.exp);
-        if (!Utils.equals(watcher.old, current)) {
+        if (!Utils.equals(watcher.old, current, watcher.eq)) {
           watcher.fn(current, watcher.old);
           watcher.old = Utils.clone(current);
           dirty = true;
         }
       }
+      if (!(ttl--)) {
+        throw '10 digest iterations reached';
+      }
+
+      // console.log(--ttl)
     } while (dirty);
     // 递归调用子scope对象的脏数据检测
     if (!disabledScanChild) {
@@ -79,6 +87,7 @@ Scope.prototype = {
           val = eval(exp);
         }
       } catch (e) {
+        console.error(e);
         val = undefined;
       }
     }

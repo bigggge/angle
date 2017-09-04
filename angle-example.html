@@ -8,25 +8,43 @@
   <body>
     <div id="app">
       <div ng-controller="MainCtrl">
-        Parent
+        <h3>Parent</h3>
+        <!--ngbindhtml-->
+        <span><b>ng-bind-html:</b></span>
+        <span ng-bind-html="myHTML"></span>
+        <!--ngbind-->
+        <span><b>ng-bind:</b></span>
+        <span ng-bind="myHTML"></span>
+        <!--ngclick-->
+        <br>
+        <span><b>ng-click:</b></span>
         <button ng-click="foo()" ng-bind="'obj-'+obj.a"></button>
         <button ng-click="foo2()" ng-bind="'a-'+a"></button>
-        <button ng-click="get()">Request</button>
+        <span><b>scope:</b></span>
         <button ng-click="print()">Print Scope</button>
+        <span><b>service & digest:</b></span>
+        <button ng-click="get()" ng-bind="getValue"></button>
+        <!--ngshow-->
+        <br>
+        <span><b>ng-show / ng-if:</b></span>
         <button ng-click="toggle()">Toggle</button>
-        <span ng-show="show" ng-bind="'ngshow'+show"></span>
+        <span ng-show="show" ng-bind="'ngShow-'+show"></span>
         <span ng-show="true">true</span>
         <span ng-show="!!0">false</span>
-        <span ng-if="show" ng-bind="'nfif'+show"></span>
+        <!--ngif-->
+        <span ng-if="show" ng-bind="'ngIf-'+show"></span>
         <span ng-if="true">true</span>
         <span ng-if="!!0">false</span>
 
         <div ng-controller="ChildCtrl">
-          Child
-          <button ng-click="childMethod()" ng-bind="obj.a"></button>
-          <input ng-model="obj.a">
-          <button ng-click="childMethod2()" ng-bind="a"></button>
-          <input ng-model="a">
+          <h3>Child</h3>
+          <div>
+            <button ng-click="childMethod()" ng-bind="obj.a"></button>
+            <button ng-click="childMethod2()" ng-bind="a"></button>
+            <!--ngmodle-->
+            <span><b>ng-model:</b></span>
+            <input ng-model="a">
+          </div>
         </div>
 
       </div>
@@ -34,9 +52,12 @@
     <script>
 
       angle.controller('MainCtrl', function ($scope, HTTPService, $timeout) {
+        $scope.myHTML =
+          '<i>HTML</i> GOOD <a href="#">links!</a>';
         $scope.a = 1;
         $scope.obj = {a: 2};
         $scope.show = true;
+        $scope.getValue = 'Request';
         $scope.foo = function () {
           $scope.obj.a++;
         };
@@ -45,10 +66,12 @@
         };
         $scope.get = function () {
           console.log('requesting...');
-          HTTPService('google.com')
+          HTTPService($scope.getValue === 'google.com done!' ? 'baidu.com' : 'google.com')
             .then(function (data) {
               console.log(data);
-              $scope.a--;
+              $scope.getValue = data;
+              // 假设angle未监听ajax事件，可手动digest
+              $scope.$digest();
             });
         };
         $scope.print = function () {
@@ -58,7 +81,6 @@
 
         $scope.toggle = function () {
           $scope.show = !$scope.show;
-          $scope.digest()
         };
 
         $timeout(function () {

@@ -32,7 +32,6 @@ const Provider = {
   },
   // 判断缓存并获取组件
   get: function (name, locals) {
-    console.log('get', name, locals);
     // 如果有缓存，直接返回
     if (this._cache[name]) {
       return this._cache[name];

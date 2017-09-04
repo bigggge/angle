@@ -5,11 +5,11 @@
  * 2017/9/1.
  */
 function timeout ($rootScope) {
-  return function (fn, timeout) {
+  return function (fn, delay) {
     setTimeout(function () {
       fn();
       $rootScope.$digest();
-    }, timeout);
+    }, delay);
   };
 }
 

@@ -6,9 +6,9 @@
  */
 
 const Utils = {
-  equals: function (a, b) {
+  equals: function (a, b, objectEquality) {
     'use strict';
-    return JSON.stringify(a) === JSON.stringify(b);
+    return objectEquality ? (JSON.stringify(a) === JSON.stringify(b)) : (a === b);
   },
   clone: function (a) {
     'use strict';

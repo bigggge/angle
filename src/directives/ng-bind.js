@@ -10,9 +10,9 @@ function ngBind () {
   return {
     scope: false,
     link: function (el, scope, exp) {
-      el.innerHTML = scope.$eval(exp);
+      el.innerText = scope.$eval(exp);
       scope.$watch(exp, function (val, old) {
-        el.innerHTML = val;
+        el.innerText = val;
       });
     }
   };
